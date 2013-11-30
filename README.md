@@ -42,7 +42,7 @@ Navigate into the project directory. For all of the remaining instructions, you 
 
 #### Select Project Database
 
-django-project-template encourages use of MySQL or PostgreSQL in development, for greater parity with the staging and production environments. Install and configure either MySQL([guide]()) or PostgreSQL([guide]()) on your local machine if you have not already done so. In your project's README.md file, under `Machine Prep`, remove the line about MySQL or PostgreSQL, whichever your project does not use.
+django-project-template encourages use of MySQL or PostgreSQL in development, for greater parity with the staging and production environments. Install and configure either MySQL([guide]()) or PostgreSQL([guide]()) on your local machine if you have not already done so. Next remove dependencies that are commented, with databases you are not using, from the requirements files. Also, in your project's README.md file, under `Machine Prep`, remove mention of any databases you are not using.
 
 Open the settings.py file within your project package directory and uncomment one of the MySQL, PostgreSQL, or SQLite settings sections within DATABASES. Check that the default database url string (e.g. mysql://username:password@localhost:3306/django_myproj) has the correct scheme, username, password, port, and database name.
 
@@ -82,7 +82,7 @@ or with [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/)
     mkvirtualenv django-myproj # create and activate environment
     workon django-myproj       # reactivate existing environment
 
-Now, check requirements/development.txt and comment/uncomment Linux/OS X depending on your platform. Install development dependencies,
+Install development dependencies,
 
     pip install -r requirements/development.txt
 

@@ -1,0 +1,2 @@
+# Many PaaS's expect a requirements.txt in the root directory.
+-r requirements/production.txt

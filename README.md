@@ -26,13 +26,13 @@ Create a virtual environment in which to install Django and other pip packages. 
 
 If you have git cloned [django-project-template](https://github.com/dghubble/django-project-template),
 
-    django-admin.py startproject --template=/path/to/django-project-template --extension py,md myproj
+    django-admin.py startproject --template=/path/to/django-project-template --extension py,md,html myproj
 
 otherwise,
 
     django-admin.py startproject \
     --template=https://github.com/dghubble/django-project-template/zipball/master \
-    --extension py,md myproj
+    --extension py,md,html myproj
 
 A *myproj* project directory containing a README.md, a manage.py script, and a *myproj* Python package directory was created. Rename the outer (project) directory to anything you wish, but don't modify the inner (package) directory or package name.
 
@@ -105,7 +105,35 @@ Start creating included source reusable Django apps with
 
 ### Deployment
 
+#### Environments
+
+#### Static Resources
+
+Static assets are hosted at '<base_url>/static/' + namespacing appname + path to the asset within the 'myapp/static/myapp' directory. In your templates, include {% load staticfiles %} at the top of the template and reference static assets like,
+
+<img src="{% static 'appname/img/myimage.png' %}" alt="myimage">
+
+proj uses the standard `django.contrib.staticfiles` app so in development, when the DEBUG setting is true, static assets are served automatically with runserver. 
+
+##### Deploying Static Resources
+
+In staging and production environments, using a web process to serve static assets is not appropriate. proj uses `django-storages` adapters to upload collected static assets to Amazon S3 and to replace static template tags correctly.
+
+Create [S3 buckets](https://console.aws.amazon.com/s3) django_proj_static and django_proj_static_staging (set in proj/settings/staging.py and proj/settings/production.py) for static assets. Also create an [IAM](https://console.aws.amazon.com/iam/home) user django_proj with the Full S3 Access permission policy.
+
+Be sure the APP_ENV, SECRET_KEY, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables are set.
+
+Upload static files,
+
+    python manage.py collectstatic  # when APP_ENV is staging or production
+
+Then, in staging and production, the static assets uploaded to the staging and production buckets, respectively, will be referenced in your templates.
+
+*Note: If a STATIC_ROOT directory was created in your project directory, your APP_ENV is set to development. Delete the STATIC_ROOT directory.*
+
 #### Heroku
+
+Customize the ALLOED_HOSTS in proj/settings/staging.py and proj/settings/production.py.
 
 
 

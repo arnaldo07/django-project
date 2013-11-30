@@ -51,3 +51,6 @@ docs/_build/
 
 # Virtualenv
 venv/
+
+# Static Assets
+STATIC_ROOT/

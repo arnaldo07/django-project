@@ -1,0 +1,20 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Django Boilerplate</title>
+    <style type="text/css">
+      body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
+      h1   { padding-top: 100px; }
+    </style>
+  </head>
+  <body>
+    <h1>404 Not Found</h1>
+    <img src="{% static 'proj/img/imaginaryi.png' %}" alt="404 image" height="200" width="200">
+    <br>
+    <h2>The page you are looking for is imaginary.</h2>
+    <a href="#">Back to Reality</a>
+  </body>
+</html>

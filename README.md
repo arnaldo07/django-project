@@ -4,18 +4,17 @@ django-project-template is a Django 1.6+ project template, giving you a skeleton
 
 ### Features
 
++ Separate dev, stag, and prod environments.
+    + cleanly separates settings and requirements
+    + switch environments easily based on APP_ENV env var.
++ [django-storages](http://django-storages.readthedocs.org/en/latest/) static asset storage backend integration with S3.
 + Environment variable based database configuration
     + [dj-database-url](https://github.com/kennethreitz/dj-database-url) configures the database from the DATABASE_URL env var.
     + database passwords kept in environment variables and out of source.
     + integrates with Amazon RDS, Heroku DBs, and others easily.
-+ Separate development, staging, and production environments.
-    + keeps projects organized and aids in debugging
-    + switch environments easily based on APP_ENV env var.
-    + separate settings per environment on top of base settings.
-    + separate requirements per environment on top of base requirements.
-+ S3 static resource collection and hosting integrations.
 + Deployable directly to Heroku.
-+ Helps your construct web applications that follow the [12factor](http://12factor.net/) methodology.
++ Helps you construct organized web applications that follow the [12factor](http://12factor.net/) methodology.
++ Default project 404 and 500 error pages. 
 
 ### Usage
 
@@ -26,7 +25,9 @@ Create a virtual environment in which to install Django and other pip packages. 
 
 If you have git cloned [django-project-template](https://github.com/dghubble/django-project-template),
 
-    django-admin.py startproject --template=/path/to/django-project-template --extension py,md,html myproj
+    django-admin.py startproject \
+    --template=/path/to/django-project-template \
+    --extension py,md,html myproj
 
 otherwise,
 
@@ -103,25 +104,40 @@ Start creating included source reusable Django apps with
 
     python manage.py startapp appname
 
-### Deployment
+
+
+### Workflow
+
 
 #### Environments
 
+Switch environments by changing the value of the APP_ENV environment variable.
+
+The `development` or `dev` environment runs the Django application with DEBUG set to true on a small development server which auto-reloads changed files. Django trackbacks are shown instead of error pages. Django itself serves the static assets located inside your project and apps. The database you have created on your local machine is used
+
+The `staging` or `stag` environment can be run both locally or deployed because it includes both in ALLOWED_HOSTS. If deployed, the staging deployment should be separate from the production deployment (e.g. different Heroku application). The staging environment uses production type deployed static assets and databases though the actual hosted assets use a different S3 bucket from production and the staging database should be separate from the production database. Authentication keys or credentials are kept in environment variables, not in source.
+
+Typically, when moving from `development` to `staging`, first switch to the staging environment locally and run the project with manage.py's runserver to test whether interactions with production type static assets and databases works without issue. Staging deployments should use production type webservers so that `staging` is identical to `production` except for the names of buckets, dbs, etc.
+
+The `production` or `prod` environment is the environment in which your application should run in the real world. All authentication keys or credentials are kept in environment variables, not in source. The project should be served by a production quality webserver such as [gunicorn](http://gunicorn.org/). Static assets should be served from a a globally available file store (S3) or CDN. Production databases should be backed up and fortified. Production static asset stores and databases should be touched with extreme caution.
+
+
 #### Static Resources
 
-Static assets are hosted at '<base_url>/static/' + namespacing appname + path to the asset within the 'myapp/static/myapp' directory. In your templates, include {% load staticfiles %} at the top of the template and reference static assets like,
+In development, static assets are hosted at '<base_url>/static/' + namespacing appname + path to the asset within the 'myapp/static/myapp' directory. In your templates, include {% load staticfiles %} at the top of the template and reference static assets like,
 
-<img src="{% static 'appname/img/myimage.png' %}" alt="myimage">
+    <img src="{% static 'appname/img/myimage.png' %}" alt="myimage">
 
 proj uses the standard `django.contrib.staticfiles` app so in development, when the DEBUG setting is true, static assets are served automatically with runserver. 
 
-##### Deploying Static Resources
+
+#### Deploying Static Resources
 
 In staging and production environments, using a web process to serve static assets is not appropriate. proj uses `django-storages` adapters to upload collected static assets to Amazon S3 and to replace static template tags correctly.
 
-Create [S3 buckets](https://console.aws.amazon.com/s3) django_proj_static and django_proj_static_staging (set in proj/settings/staging.py and proj/settings/production.py) for static assets. Also create an [IAM](https://console.aws.amazon.com/iam/home) user django_proj with the Full S3 Access permission policy.
+First, create [S3 buckets](https://console.aws.amazon.com/s3) django_proj_static and django_proj_static_staging (set in proj/settings/staging.py and proj/settings/production.py) for static assets. Then create an [IAM](https://console.aws.amazon.com/iam/home) user django_proj with the Full S3 Access permission policy.
 
-Be sure the APP_ENV, SECRET_KEY, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables are set.
+Be sure the APP_ENV, SECRET_KEY, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY environment variables are set in your environment.
 
 Upload static files,
 
@@ -131,9 +147,14 @@ Then, in staging and production, the static assets uploaded to the staging and p
 
 *Note: If a STATIC_ROOT directory was created in your project directory, your APP_ENV is set to development. Delete the STATIC_ROOT directory.*
 
+
+
+### Deployment
+
+
 #### Heroku
 
-Customize the ALLOED_HOSTS in proj/settings/staging.py and proj/settings/production.py.
+Customize the ALLOWED_HOSTS in proj/settings/staging.py and proj/settings/production.py.
 
 
 

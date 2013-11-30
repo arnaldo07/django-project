@@ -1,5 +1,5 @@
 """
-Django settings for project_name project.
+Django settings for proj project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+# Package to read database config from DATABASE_URL envvar.
+import dj_database_url
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,19 +49,24 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'project_name.urls'
+ROOT_URLCONF = 'proj.urls'
 
-WSGI_APPLICATION = 'project_name.wsgi.application'
+WSGI_APPLICATION = 'proj.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # MySQL
+    'default': dj_database_url.config(default=
+        "mysql://dghubble:password@localhost:3306/django_proj")
+    # # PostgreSQL
+    # 'default': dj_database_url.config(default=
+    #     "postgres://dghubble:password@localhost:5432/django_proj")
+    # # SQLite
+    # 'default': dj_database_url.config(default=
+    #     "sqlite:////%s" % os.path.join(BASE_DIR, 'db.sqlite3'))
 }
 
 # Internationalization

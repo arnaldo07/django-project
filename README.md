@@ -26,20 +26,24 @@ Create a virtual environment in which to install Django and other pip packages. 
 If you have git cloned [django-project-template](https://github.com/dghubble/django-project-template),
 
     django-admin.py startproject \
-    --template=/path/to/django-project-template \
-    --extension py,md,html myproj
+    --template /path/to/django-project-template \
+    -e py,md,html \
+    -n Procfile myproj
 
 otherwise,
 
     django-admin.py startproject \
-    --template=https://github.com/dghubble/django-project-template/zipball/master \
-    --extension py,md,html myproj
+    --template https://github.com/dghubble/django-project-template/zipball/master \
+    -e py,md,html \
+    -n Procfile myproj
 
 A *myproj* project directory containing a README.md, a manage.py script, and a *myproj* Python package directory was created. Rename the outer (project) directory to anything you wish, but don't modify the inner (package) directory or package name.
 
     mv myproj convenient-name   # optional
 
-Navigate into the project directory. For all of the remaining instructions, you should be located inside the project directory.
+If you specified an output path after *myproj* in the template command, the project directory *contents* will be placed at that location, not within a project directory.
+
+Navigate into the directory containing the project. For all of the remaining instructions, you should be located inside the project directory.
 
 #### Select Project Database
 
@@ -62,7 +66,9 @@ Once you develop your project a little further, you may delete the first part of
 
 ### Overview
 
-proj ...
+proj a Django web application ...
+
+... initially based on the [django-project-template](https://github.com/dghubble/django-project-template).
 
 ### Machine Prep
 
@@ -151,10 +157,86 @@ Then, in staging and production, the static assets uploaded to the staging and p
 
 ### Deployment
 
+Before you deploy, customize the ALLOWED_HOSTS in proj/settings/staging.py and proj/settings/production.py to match only your deployment domain.
+
 
 #### Heroku
 
-Customize the ALLOWED_HOSTS in proj/settings/staging.py and proj/settings/production.py.
+Create Heroku app repo and add Git remote `heroku`,
+
+    heroku login               # if you haven't already
+    heroku create              # from within project directory
+    
+Now rename your project on Heroku,
+
+    heroku apps:rename newname # dashes instead of underscores
+    git remote -v              # should list 'heroku' as a remote repo
+
+Define the following environment variables for the Heroku application:
+
++ APP_ENV
++ SECRET_KEY
++ AWS_ACCESS_KEY_ID
++ AWS_SECRET_ACCESS_KEY
+
+as follows,
+
+    heroku config:set APP_ENV=staging
+    heroku config:set SECRET_KEY='random secret...'
+    ...
+    heroku config              # check env vars are correct
+
+Connect to your database. 
+
+For MySQL, [setup]() your [Amazon RDS](https://console.aws.amazon.com/rds/home) instance, database user, and database. Be sure to require [SSL encrypted](http://aws.amazon.com/rds/faqs/#54) connections. Alternately, use another [supported](https://addons.heroku.com/?q=mysql) MySQL provider.
+
+    heroku addons:add amazon_rds url=mysql2://user:pass@rdshostname.amazonaws.com:3306/dbname
+    heroku config              # check DATABASE_URL is correct           
+
+For conventience, add you MYSQL_HOST to an environment variable so you can connect to your database directly if needed.
+
+    export MYSQL_HOST=dbidentifier.ch34mweifni.region-rds.amazonaws.com
+    mysql -h $MYSQL_HOST -u master_user -p
+
+For PostgreSQL, ...
+
+Turn on Heroku's `user-env-compile` feature so `django-storages` can read environment variables to determine how to collect and upload static assets.
+
+    heroku labs:enable user-env-compile
+
+Push your application to Heroku,
+
+    git push heroku master:master
+
+One-off commands allow setting up database tables and uploading static assets as you would do locally. Heroku's `user-env-compile` lab should allow `django-storages` to automatically collect and upload static assets so the first command may not be needed.
+
+    heroku run python manage.py collectstatic
+    heroku run python manage.py syncdb
+
+Check up on your Heroku application,
+
+    heroku open                # open application in browser
+    heroku ps                  # see web/worker counts and stats
+
+##### Troubleshooting
+
+    heroku ps
+    heroku logs                # check Heroku logs
+    heroku config              # check your Heroku env vars
+    heroku restart             # restart dynos
+
+
+#### EC2
+
+
+
+
+
+
+
+
+
+
 
 
 

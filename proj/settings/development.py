@@ -1,7 +1,7 @@
 # Settings modifications for development environment
 
 # Secret key used in development only
-SECRET_KEY = '0dl+$c*4xq7+!r(c2ivuzf0gon4=rcfr^ho_q$*h^)s^#a1)9p'
+SECRET_KEY = '05j39r*6$_(w7&w7)r5t1an0#24so3ua85#*tdk@^g@n+1&o#='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

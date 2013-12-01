@@ -1,8 +1,8 @@
-## django-project-template
+# django-project-template
 
 django-project-template is a Django 1.6+ project template, giving you a skeleton web application with some useful, but general, features. 
 
-### Features
+## Features
 
 + Separate dev, stag, and prod environments.
     + cleanly separates settings and requirements
@@ -16,7 +16,7 @@ django-project-template is a Django 1.6+ project template, giving you a skeleton
 + Helps you construct organized web applications that follow the [12factor](http://12factor.net/) methodology.
 + Default project 404 and 500 error pages. 
 
-### Usage
+## Usage
 
 Create a virtual environment in which to install Django and other pip packages. See [virtualenv](https://pypi.python.org/pypi/virtualenv) or [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/))
 
@@ -45,39 +45,44 @@ If you specified an output path after *myproj* in the template command, the proj
 
 Navigate into the directory containing the project. For all of the remaining instructions, you should be located inside the project directory.
 
-#### Select Project Database
+### Database Type
 
-django-project-template encourages use of MySQL or PostgreSQL in development, for greater parity with the staging and production environments. Install and configure either MySQL([guide]()) or PostgreSQL([guide]()) on your local machine if you have not already done so. Next remove dependencies that are commented, with databases you are not using, from the requirements files. Also, in your project's README.md file, under `Machine Prep`, remove mention of any databases you are not using.
+django-project-template encourages use of MySQL or PostgreSQL in development, for greater parity with the staging and production environments. Install and configure either MySQL([guide]()) or PostgreSQL([guide]()) on your local machine if you have not already done so. Next remove requirements that are commented with databases you are not using. Also, in your project's README.md file, under `Prerequisites`, remove mention of any databases you are not using.
 
-Open the settings.py file within your project package directory and uncomment one of the MySQL, PostgreSQL, or SQLite settings sections within DATABASES. Check that the default database url string (e.g. mysql://username:password@localhost:3306/django_myproj) has the correct scheme, username, password, port, and database name.
+Open the settings.py file within your project package directory and uncomment one of the MySQL, PostgreSQL, or SQLite settings sections within DATABASES. Check that the default database url string has the correct scheme, username, password, port, and database name.
 
 django-project-template allows storing local database authentication credentials in source code since in development environments, throw-away database accounts and databases are frequently used. However, if this is a concern, remove the default keyword argument to `dj_database_url.config` entirely so the database used by the Django project is configured by the DATABASE_URL environment variable alone.
 
-### Continuing
+## Going Further
 
-The django-project-template README is divided into 2 parts. The first, which includes this and prior sections, describes how to generate a Django project from the template. The later part is a skeleton for the README of your generated project - it is personalized for your project so instead of {% project_name %} blocks, your project name will be used instead. 
+The django-project-template README is divided into 2 parts. The first is django-project-template specific and describes how to generate a Django project from the template. The second part begins with the heading "proj Project" and serves as a skeleton README of the generated project - it is personalized for your project so instead of {% project_name %} blocks, your project name will be used instead. 
 
 If you haven't already, switch to the README.md file generated inside your personal Django project and continue following the directions there, from this point. 
 
-Once you develop your project a little further, you may delete the first part of this README so it can focus on describing your Django project, shwoing how to setup the project, etc. 
+Once you develop your project a little further, you may delete the first part of this README so it focuses on your Django Project, its setup, etc. 
+
+## Contributing
+
+Want a particular feature? Discovered a bug or problem? Open an issue. Here are some nice [Issue Guidelines](https://github.com/necolas/issue-guidelines/blob/master/CONTRIBUTING.md) you can follow. 
 
 
-## proj Project
 
-### Overview
+# proj Project
+
+## Overview
 
 proj a Django web application ...
 
 ... initially based on the [django-project-template](https://github.com/dghubble/django-project-template).
 
-### Machine Prep
+## Prerequisites
 
 If you haven't already, install and configure MySQL on your local machine ([guide]()). 
 If you haven't already, install and configure PostgreSQL on your local machine ([guide]()). 
 
 Create a database user and database django_proj to use for proj development. Ensure the database url string under DATABASES in proj/settings.py corresponds to your setup.
 
-### Project Setup
+## Setup
 
 Create a virtual environment in which to install Python pip packages. Virtual environment activation with [virtualenv](https://pypi.python.org/pypi/virtualenv),
 
@@ -102,20 +107,10 @@ Run the web application locally,
     python manage.py runserver # 127.0.0.1:8000
 
 
-### Adding Apps
-
-Projects templated from django-project-template are designed so that reusable apps you include source code for can be placed adjacent to the project's package directory proj. Add the (unprefixed) app names to proj/settings.py INSTALLED_APPS. The `static` and `templates` directories of your included apps should use inner directories that match the name of the app for namespacing.
-
-Start creating included source reusable Django apps with
-
-    python manage.py startapp appname
+## Workflow
 
 
-
-### Workflow
-
-
-#### Environments
+### Environments
 
 Switch environments by changing the value of the APP_ENV environment variable.
 
@@ -128,7 +123,7 @@ Typically, when moving from `development` to `staging`, first switch to the stag
 The `production` or `prod` environment is the environment in which your application should run in the real world. All authentication keys or credentials are kept in environment variables, not in source. The project should be served by a production quality webserver such as [gunicorn](http://gunicorn.org/). Static assets should be served from a a globally available file store (S3) or CDN. Production databases should be backed up and fortified. Production static asset stores and databases should be touched with extreme caution.
 
 
-#### Static Resources
+### Static Resources
 
 In development, static assets are hosted at '<base_url>/static/' + namespacing appname + path to the asset within the 'myapp/static/myapp' directory. In your templates, include {% load staticfiles %} at the top of the template and reference static assets like,
 
@@ -137,7 +132,7 @@ In development, static assets are hosted at '<base_url>/static/' + namespacing a
 proj uses the standard `django.contrib.staticfiles` app so in development, when the DEBUG setting is true, static assets are served automatically with runserver. 
 
 
-#### Deploying Static Resources
+### Deploying Static Resources
 
 In staging and production environments, using a web process to serve static assets is not appropriate. proj uses `django-storages` adapters to upload collected static assets to Amazon S3 and to replace static template tags correctly.
 
@@ -153,14 +148,22 @@ Then, in staging and production, the static assets uploaded to the staging and p
 
 *Note: If a STATIC_ROOT directory was created in your project directory, your APP_ENV is set to development. Delete the STATIC_ROOT directory.*
 
+### Adding Apps
+
+Projects templated from django-project-template are designed so that reusable apps you include source code for can be placed adjacent to the project's package directory proj. Add the (unprefixed) app names to proj/settings.py INSTALLED_APPS. The `static` and `templates` directories of your included apps should use inner directories that match the name of the app for namespacing.
+
+Start creating included source reusable Django apps with
+
+    python manage.py startapp appname
 
 
-### Deployment
+
+## Deployment
 
 Before you deploy, customize the ALLOWED_HOSTS in proj/settings/staging.py and proj/settings/production.py to match only your deployment domain.
 
 
-#### Heroku
+### Heroku
 
 Create Heroku app repo and add Git remote `heroku`,
 
@@ -186,7 +189,14 @@ as follows,
     ...
     heroku config              # check env vars are correct
 
-Connect to your database. 
+Turn on Heroku's `user-env-compile` feature so `django-storages` can read environment variables to determine how to collect and upload static assets.
+
+    heroku labs:enable user-env-compile
+
+
+#### Database Connection
+
+##### MySQL
 
 For MySQL, [setup]() your [Amazon RDS](https://console.aws.amazon.com/rds/home) instance, database user, and database. Be sure to require [SSL encrypted](http://aws.amazon.com/rds/faqs/#54) connections. Alternately, use another [supported](https://addons.heroku.com/?q=mysql) MySQL provider.
 
@@ -198,11 +208,12 @@ For conventience, add you MYSQL_HOST to an environment variable so you can conne
     export MYSQL_HOST=dbidentifier.ch34mweifni.region-rds.amazonaws.com
     mysql -h $MYSQL_HOST -u master_user -p
 
+##### PostgreSQL
+
 For PostgreSQL, ...
 
-Turn on Heroku's `user-env-compile` feature so `django-storages` can read environment variables to determine how to collect and upload static assets.
 
-    heroku labs:enable user-env-compile
+#### Pushing
 
 Push your application to Heroku,
 
@@ -218,7 +229,7 @@ Check up on your Heroku application,
     heroku open                # open application in browser
     heroku ps                  # see web/worker counts and stats
 
-##### Troubleshooting
+#### Troubleshooting
 
     heroku ps
     heroku logs                # check Heroku logs
@@ -226,7 +237,7 @@ Check up on your Heroku application,
     heroku restart             # restart dynos
 
 
-#### EC2
+### EC2
 
 
 

@@ -1,6 +1,7 @@
 Django==1.6
 dj-database-url==0.2.2
 gunicorn==18.0
+django-sslify==0.2
 
 # Static Assets
 django-storages==1.1.8

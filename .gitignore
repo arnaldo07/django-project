@@ -54,3 +54,6 @@ venv/
 
 # Static Assets
 STATIC_ROOT/
+
+# OS X Files
+.DS_Store

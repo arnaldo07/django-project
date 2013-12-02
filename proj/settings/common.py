@@ -35,10 +35,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'storages',                    # file storage backend adapter
+    'storages'                 # file storage backend adapter
 )
 
 MIDDLEWARE_CLASSES = (
+    'sslify.middleware.SSLifyMiddleware',   # stag/prod redirect http to https
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

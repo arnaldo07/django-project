@@ -59,10 +59,10 @@ WSGI_APPLICATION = 'proj.wsgi.application'
 DATABASES = {
     # MySQL
     'default': dj_database_url.config(default=
-        "mysql://dghubble:password@localhost:3306/django_proj")
+        "mysql://dghubble:password@localhost:3306/proj_dev")
     # # PostgreSQL
     # 'default': dj_database_url.config(default=
-    #     "postgres://dghubble:password@localhost:5432/django_proj")
+    #     "postgres://dghubble:password@localhost:5432/proj_dev")
     # # SQLite
     # 'default': dj_database_url.config(default=
     #     "sqlite:////%s" % os.path.join(BASE_DIR, 'db.sqlite3'))

@@ -11,7 +11,7 @@ proj a Django web application ...
 If you haven't already, install and configure MySQL on your local machine ([guide]()). 
 If you haven't already, install and configure PostgreSQL on your local machine ([guide]()). 
 
-Create a database user and also a database proj_dev to use for development. Ensure the database url string under DATABASES in proj/settings.py corresponds to your setup.
+Create a database user and also a database proj_dev to use for development. Ensure the database url string under DATABASES in proj/settings/common.py corresponds to your setup.
 
 ## Setup
 
@@ -148,7 +148,7 @@ Turn on Heroku's `user-env-compile` feature so `django-storages` can read enviro
 
 For MySQL, [setup]() your [Amazon RDS](https://console.aws.amazon.com/rds/home) instance. Create a user proj_stag and database proj_stag for staging. Also create user proj and database proj for production. Be sure to require [SSL encrypted](http://aws.amazon.com/rds/faqs/#54) connections. Alternately, use another [supported](https://addons.heroku.com/?q=mysql) MySQL provider.
 
-    heroku addons:add amazon_rds --url=mysql2://user:pass@rdshostname.amazonaws.com:3306/dbname -r staging
+    heroku addons:add amazon_rds --url=mysql2://user:pass@rdshost:3306/dbname -r staging
     # check DATABASE_URL is correct
     heroku config -r staging 
     # remove Postgresql addon which Heroku may add automatically

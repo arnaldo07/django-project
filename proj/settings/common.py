@@ -67,6 +67,9 @@ DATABASES = {
     # 'default': dj_database_url.config(default=
     #     "sqlite:////%s" % os.path.join(BASE_DIR, 'db.sqlite3'))
 }
+# Point to SSL Amazon RDS public key for stag/prod environments. 
+DATABASES['default']['OPTIONS'] = {'ssl': {'ca': 'proj/config/ca/rds-ssl-ca-cert.pem'}}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
